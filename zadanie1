@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp3
+{
+    class Robot : IWork, ICharge
+    {
+        public string Name { get; private set; }
+        public int Energy { get; private set; }
+
+        public Robot(string name)
+        {
+            Name = name;
+            Energy = 100;
+        }
+
+        public void Work()
+        {
+            Energy -= 20;
+            if (Energy < 0) Energy = 0;
+            Console.WriteLine($"{Name} работает. Текущая энергия: {Energy}");
+        }
+
+        public void Charge()
+        {
+            Energy += 50;
+            if (Energy > 100) Energy = 100;
+            Console.WriteLine($"{Name} заряжается. Текущая энергия: {Energy}");
+        }
+    }
+}
+
+namespace ConsoleApp3
+{
+    interface IWork
+    {
+        void Work();
+    }
+
+    interface ICharge
+    {
+        void Charge();
+    }
+    internal class Program
+    {
+         static void Main(string[] args)
+        {
+            IWork[] works = { new Robot("Робот") };
+            foreach (IWork work in works) 
+            {
+                work.Work();
+            }
+            IWork[] works2 = { new Robot("Робот") };
+            foreach (IWork work in works)
+            {
+                work.Work();
+            }
+            ICharge[] charges = { new Robot("Робот") };
+            foreach (ICharge charge in charges)
+            {
+                charge.Charge();
+            }
+            IWork[] works3 = { new Robot("Робот") };
+            foreach (IWork work in works3)
+            {
+                work.Work();
+            }
+        }
+    }
+}
