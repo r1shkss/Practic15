@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace priorochka
+{
+    interface IPriceable
+    {
+        double GetPrice();
+    }
+
+    interface IWarrantable
+    {
+        int GetWarrantyMonths();
+    }
+
+    class iPhone : IPriceable, IWarrantable
+    {
+        private double price;
+        private int warrantyMonths;
+
+        public iPhone(double price, int warrantyMonths)
+        {
+            this.price = price;
+            this.warrantyMonths = warrantyMonths;
+        }
+
+        public double GetPrice()
+        {
+            return price;
+        }
+
+        public int GetWarrantyMonths()
+        {
+            return warrantyMonths;
+        }
+    }
+
+    class Macbook : IPriceable
+    {
+        private double price;
+
+        public Macbook(double price)
+        {
+            this.price = price;
+        }
+
+        public double GetPrice()
+        {
+            return price;
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            IPriceable[] products = { new iPhone(50000, 24), new Macbook(80000) };
+
+            double totalCost = 0;
+
+            foreach (IPriceable product in products)
+            {
+                totalCost += product.GetPrice();
+
+                if (product is IWarrantable warrantable)
+                {
+                    Console.WriteLine($"Гарантия: {warrantable.GetWarrantyMonths()} месяцев");
+                }
+            }
+
+            Console.WriteLine($"Общая стоимость: {totalCost}");
+        }
+    }
+}
