@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace priorochka
+{
+    interface IAttacker
+    {
+        void Attack();
+    }
+
+    interface IHealer
+    {
+        void Heal();
+    }
+
+    class Warrior : IAttacker
+    {
+        public void Attack()
+        {
+            Console.WriteLine("Воин атакует мечом");
+        }
+    }
+
+    class Mage : IAttacker, IHealer
+    {
+        public void Attack()
+        {
+            Console.WriteLine("Маг атакует магическим шаром");
+        }
+
+        public void Heal()
+        {
+            Console.WriteLine("Маг исцеляет");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            IAttacker[] attackers = { new Warrior(), new Mage() };
+
+            Console.WriteLine("Все атакующие:");
+            foreach (IAttacker attacker in attackers)
+            {
+                attacker.Attack();
+            }
+
+            Console.WriteLine("\nВсе лечащие:");
+            IHealer[] healers = { new Mage() };
+            foreach (IHealer healer in healers)
+            {
+                healer.Heal();
+            }
+        }
+    }
+}
