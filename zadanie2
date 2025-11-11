@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp3
+{
+    class Lamp : ISwitchable, ILevelable
+    {
+        private int level = 0;
+        public void TurnOn()
+        {
+            level = 100;
+            Console.WriteLine($"Лампа включена. Уровень: {level}");
+        }
+        public void TurnOff()
+        {
+            level = 0;
+            Console.WriteLine($"Лампа выключена. Уровень: {level}");
+        }
+        public void SetLevel(int level) 
+        {
+            if (level < 0) level = 0;
+            if (level > 100) level = 100;
+            this.level = level;
+            Console.WriteLine($"Уровень лампы установлен на {this.level}");
+        }
+    }
+    class Fan : ISwitchable
+    {
+        public void TurnOn()
+        {
+            Console.WriteLine("Вентилятор включен");
+        }
+
+        public void TurnOff()
+        {
+            Console.WriteLine("Вентилятор выключен");
+        }
+        
+}   }
+namespace ConsoleApp3
+{
+    interface ISwitchable
+    {
+        void TurnOn();
+        void TurnOff();
+    }
+    interface ILevelable
+    {
+        void SetLevel(int level);
+    }
+
+    internal class Program
+    {
+         static void Main(string[] args)
+        {
+            ISwitchable[] devices = { new Lamp(), new Fan() };
+
+            foreach (ISwitchable device in devices)
+            {
+                device.TurnOn();
+
+                if (device is ILevelable levelable)
+                {
+                    levelable.SetLevel(88);
+                }
+
+                device.TurnOff();
+            }
+        }
+    }
+}
+    
