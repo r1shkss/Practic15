@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace priorochka
+{
+    interface IBankAccount
+    {
+        void Deposit(decimal amount);
+        void Withdraw(decimal amount);
+    }
+
+    interface ITransferable
+    {
+        void Transfer(IBankAccount target, decimal amount);
+    }
+
+    class BankAccount : IBankAccount, ITransferable
+    {
+        private decimal balance;
+        public string AccountNumber { get; }
+
+        public BankAccount(string accountNumber, decimal initialBalance = 0)
+        {
+            AccountNumber = accountNumber;
+            balance = initialBalance;
+        }
+
+        public void Deposit(decimal amount)
+        {
+            if (amount > 0)
+            {
+                balance += amount;
+                Console.WriteLine($"Внесено {amount} на счет {AccountNumber}. Баланс: {balance}");
+            }
+            else
+            {
+                Console.WriteLine("Ошибка: сумма для внесения должна быть больше 0");
+            }
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            if (amount > 0)
+            {
+                if (balance >= amount)
+                {
+                    balance -= amount;
+                    Console.WriteLine($"Снято {amount} со счета {AccountNumber}. Баланс: {balance}");
+                }
+                else
+                {
+                    Console.WriteLine($"Ошибка: недостаточно средств на счете {AccountNumber}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ошибка: сумма для снятия должна быть больше 0");
+            }
+        }
+
+        public void Transfer(IBankAccount target, decimal amount)
+        {
+            if (amount > 0)
+            {
+                if (balance >= amount)
+                {
+                    balance -= amount;
+                    target.Deposit(amount);
+                    Console.WriteLine($"Переведено {amount} со счета {AccountNumber} на счет {(target as BankAccount)?.AccountNumber}");
+                }
+                else
+                {
+                    Console.WriteLine($"Ошибка: недостаточно средств для перевода со счета {AccountNumber}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ошибка: сумма перевода должна быть больше 0");
+            }
+        }
+
+        public void DisplayBalance()
+        {
+            Console.WriteLine($"Счет {AccountNumber}: баланс {balance}");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            BankAccount account1 = new BankAccount("123456", 1052);
+            BankAccount account2 = new BankAccount("678910", 552);
+
+            Console.WriteLine("Начальные балансы:");
+            account1.DisplayBalance();
+            account2.DisplayBalance();
+
+            Console.WriteLine("\nПеревод 52 со счета 1 на счет 2:");
+            account1.Transfer(account2, 52);
+
+            Console.WriteLine("\nБалансы после перевода:");
+            account1.DisplayBalance();
+            account2.DisplayBalance();
+        }
+    }
+}
